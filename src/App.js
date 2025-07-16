@@ -11,7 +11,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 function App() {
   return (
     <Router>
-      <div className='min-h-screen bg-[oklch(0.34_0.07_200.84)] text-white'>
+      <div className='min-h-screen bg-gray-900 text-white'>
         <Navbar/>
         <div className='container mx-auto px-4 py-6'>
           <Routes>
