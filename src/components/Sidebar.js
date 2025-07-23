@@ -8,7 +8,8 @@ const Sidebar = ({ isAdmin }) => {
 
   const userLinks = [
     { to: '/dashboard', label: 'Dashboard' },
-    { to: '/raise-ticket', label: 'Raise Ticket' },
+    // Only show 'Raise Ticket' if not admin
+    ...(!isAdmin ? [{ to: '/raise-ticket', label: 'Raise Ticket' }] : []),
     { to: '/my-tickets', label: 'My Tickets' },
     { to: '/profile', label: 'Profile' },
   ];
@@ -21,7 +22,7 @@ const Sidebar = ({ isAdmin }) => {
     <>
       {/* Mobile Toggle Button */}
       <button
-        className="md:hidden fixed top-4 left-4 z-50 bg-blue-950 text-white p-2 rounded focus:outline-none shadow-lg"
+        className="md:hidden fixed top-4 left-4 z-50 bg-indigo-600 text-white p-2 rounded focus:outline-none shadow-lg"
         onClick={() => setOpen((o) => !o)}
         aria-label="Toggle sidebar"
       >
@@ -30,16 +31,16 @@ const Sidebar = ({ isAdmin }) => {
         </svg>
       </button>
       {/* Sidebar */}
-      <div className={`w-64 h-screen bg-blue-950 text-white fixed top-0 left-0 p-6 z-40 transition-transform duration-300 ${open ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:block`}
+      <div className={`w-64 h-screen bg-white text-slate-800 fixed top-0 left-0 p-6 z-40 transition-transform duration-300 border-r border-slate-200 ${open ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:block`}
         aria-label="Sidebar navigation"
       >
-        <h2 className="text-xl font-bold mb-8">Service Desk</h2>
+        <h2 className="text-xl font-bold mb-8 text-indigo-600">Service Desk</h2>
         <nav className="flex flex-col space-y-4">
           {userLinks.map((link) => (
             <Link
               key={link.to}
               to={link.to}
-              className={`hover:text-blue-300 px-2 py-1 rounded ${location.pathname === link.to ? 'bg-blue-800 text-blue-200 font-semibold' : ''}`}
+              className={`hover:text-emerald-600 px-2 py-1 rounded transition ${location.pathname === link.to ? 'bg-indigo-100 text-indigo-700 font-semibold' : ''}`}
               onClick={() => setOpen(false)}
             >
               {link.label}
@@ -49,7 +50,7 @@ const Sidebar = ({ isAdmin }) => {
             <Link
               key={link.to}
               to={link.to}
-              className={`hover:text-blue-300 px-2 py-1 rounded ${location.pathname === link.to ? 'bg-blue-800 text-blue-200 font-semibold' : ''}`}
+              className={`hover:text-emerald-600 px-2 py-1 rounded transition ${location.pathname === link.to ? 'bg-indigo-100 text-indigo-700 font-semibold' : ''}`}
               onClick={() => setOpen(false)}
             >
               {link.label}

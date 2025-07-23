@@ -1,40 +1,39 @@
-// src/auth/RequireAdmin.js
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, Outlet } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
 import { getDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import Loading from '../components/Loading'; // optional loader
 
-const RequireAdmin = ({ children }) => {
+const RequireAdmin = () => {
   const [user, loading] = useAuthState(auth);
+  const [isAdmin, setIsAdmin] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const checkAdmin = async () => {
-      if (user) {
-        const userRef = doc(db, 'users', user.uid);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists() && userSnap.data().role === 'admin') {
-          // Admin verified
-        } else {
-          alert('Access denied: Admins only.');
-          navigate('/');
-        }
-      } else {
+      if (!user) {
         navigate('/login');
+        return;
+      }
+
+      const userRef = doc(db, 'users', user.uid);
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists() && userSnap.data().role === 'admin') {
+        setIsAdmin(true);
+      } else {
+        alert('Access denied: Admins only.');
+        navigate('/');
       }
     };
 
-    if (!loading) {
-      checkAdmin();
-    }
+    if (!loading) checkAdmin();
   }, [user, loading, navigate]);
 
-  if (loading) return <Loading />;
+  if (loading || isAdmin === null) return <Loading />;
 
-  return children;
+  return <Outlet />;
 };
 
 export default RequireAdmin;

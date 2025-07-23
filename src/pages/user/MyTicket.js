@@ -14,7 +14,7 @@ const MyTicket = () => {
         const user = auth.currentUser;
         if (!user) return;
 
-        const q = query(collection(db, 'tickets'), where('userId', '==', user.uid));
+        const q = query(collection(db, 'tickets'), where('createdBy', '==', user.uid));
         const querySnapshot = await getDocs(q);
 
         const ticketsData = querySnapshot.docs.map(doc => ({
@@ -33,41 +33,40 @@ const MyTicket = () => {
   }, []);
 
   return (
-    <div className="flex">
+    <div className="flex bg-slate-50 min-h-screen">
       <Sidebar isAdmin={false} />
-
-      <div className="flex-1 p-6 ml-64 bg-blue-900 text-white min-h-screen">
-        <h1 className="text-3xl font-bold mb-6">My Tickets</h1>
-
+      <div className="flex-1 p-8 ml-64 min-h-screen text-slate-800">
+        <h1 className="text-3xl font-bold mb-8 text-indigo-700">My Tickets</h1>
         {loading ? (
-          <p>Loading tickets...</p>
+          <p className="text-indigo-600 text-lg">Loading tickets...</p>
         ) : tickets.length === 0 ? (
-          <p>No tickets raised yet.</p>
+          <div className="bg-white p-8 rounded-xl shadow text-center text-slate-500 text-lg">No tickets raised yet.</div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-6">
             {tickets.map(ticket => (
               <div
                 key={ticket.id}
-                className="bg-blue-800 p-4 rounded-lg shadow-md"
+                className="bg-white p-6 rounded-xl shadow-md border border-slate-100"
               >
-                <h2 className="text-xl font-semibold">{ticket.subject}</h2>
-                <p className="text-sm text-gray-300">
+                <h2 className="text-xl font-semibold text-slate-800 mb-2">{ticket.subject}</h2>
+                <p className="text-sm text-slate-500 mb-1">
                   <strong>Category:</strong> {ticket.category} | <strong>Priority:</strong> {ticket.priority}
                 </p>
-                <p className="text-sm mt-2">
+                <p className="text-sm mb-1">
                   <strong>Status:</strong>{' '}
                   <span
-                    className={`${
+                    className={`font-semibold ${
                       ticket.status === 'Resolved'
-                        ? 'text-green-400'
+                        ? 'text-emerald-600'
                         : ticket.status === 'In Progress'
-                        ? 'text-yellow-400'
-                        : 'text-red-400'
+                        ? 'text-indigo-500'
+                        : 'text-rose-500'
                     }`}
                   >
                     {ticket.status}
                   </span>
                 </p>
+                <p className="text-xs text-slate-400 mt-2">Submitted: {ticket.userEmail}</p>
               </div>
             ))}
           </div>
